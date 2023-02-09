@@ -5,8 +5,6 @@ defmodule Harmony.Application do
 
   use Application
 
-  @chat_server_registry ChatServerCache
-
   @impl true
   def start(_type, _args) do
     children = [
@@ -18,6 +16,8 @@ defmodule Harmony.Application do
       {Phoenix.PubSub, name: Harmony.PubSub},
       # Start the Chat Server Registry
       {Registry, keys: :unique, name: ChatServerCache},
+      # Start the Supervisor for the chat rooms
+      {Harmony.Chat.RoomHost, name: ChatRoomHost},
       # Start the Endpoint (http/https)
       HarmonyWeb.Endpoint
       # Start a worker by calling: Harmony.Worker.start_link(arg)
